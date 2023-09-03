@@ -1,0 +1,30 @@
+{
+  "name": "@origamicore/leaderboard",
+  "version": "0.1.0",
+  "description": "origamicore leaderboard",
+  "main": "./dist/Index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node ./dist/sample/lbSample.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/origamicore/leaderboard.git"
+  },
+  "keywords": [
+    "leaderboard",
+    "origamicore"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/origamicore/leaderboard/issues"
+  },
+  "homepage": "https://github.com/origamicore/leaderboard#readme",
+  "dependencies": {
+    "@origamicore/core": "^4.0.4",
+    "redis": "^4.6.8",
+    "typescript": "^5.2.2",
+    "uuid": "^9.0.0"
+  }
+}
