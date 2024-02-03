@@ -52,21 +52,41 @@ export default class TsOriLeaderboard implements PackageIndex
         return RouteResponse.success(data);
         
 	} 
-    @OriService({})
-	async getBoard(gameId:string,userid:string)
+    @OriService({isInternal:true})
+	async getBoard(gameId:string,userid:string,count:number,top:number)
 	{
-        var val =await this.connection.sendCommand(['zrevrank',gameId,userid])
-        var begin=val-3
-        var end=val+3
-        if(begin<0)begin=0;
-        var data = await this.connection.sendCommand(['zrevrange',gameId,begin.toString(), end.toString(), 'withscores'])
-        return this.convertUser(data)
+        let topborad=[];
+        if(top>-1)
+        {
+            var topdata = await this.connection.sendCommand(['zrevrange',gameId,'0', top.toString(), 'withscores'])
+            topborad=await this.convertUser(topdata) 
+        }
+        if(!topborad.filter(p=>p.name==userid)[0])
+        {
+            var val =await this.connection.sendCommand(['zrevrank',gameId,userid])
+            var begin=val-count
+            var end=val+count
+            if(begin<0)begin=0;
+            var data = await this.connection.sendCommand(['zrevrange',gameId,begin.toString(), end.toString(), 'withscores'])
+            let board=await this.convertUser(data)
+            for(var a=0;a<board.length;a++)
+            {
+
+                board[a].rank=begin+a
+                if(!topborad.filter(p=>p.name==board[a].name)[0])
+                {
+                    topborad.push(board[a])
+                }
+            }
+            
+        }
+        return topborad
          
 	}
-    @OriService({})
+    @OriService({isInternal:true})
 	async getTopTen(gameId:string)
 	{
-        var data = await this.connection.sendCommand(['zrevrange',gameId,'0', '10', 'withscores'])
+        var data = await this.connection.sendCommand(['zrevrange',gameId,'0', '9', 'withscores'])
         return this.convertUser(data) 
 	}
     @OriService({isInternal:true})

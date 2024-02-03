@@ -50,7 +50,7 @@ export default class LeaderboardRouter
     {
         var response= await Router.runInternal('leaderboard','getTop',new MessageModel({data:{
             gameId,
-            top
+            top:top-1
          }}))       
          var arr:BoardModel[]=[]   
          for(var a of response.response.data)arr.push(new BoardModel(a))
@@ -69,5 +69,17 @@ export default class LeaderboardRouter
             gameId 
          }}))        
          return !!response.response.data;  
+    }
+    static async getBoard(gameId:string,userid:string,count:number,top:number=0):Promise<BoardModel[]>
+    {
+        var response= await Router.runInternal('leaderboard','getBoard',new MessageModel({data:{
+            gameId,
+            userid,
+            count,
+            top:top-1
+         }}))        
+         var arr:BoardModel[]=[]   
+         for(var a of response.response.data)arr.push(new BoardModel(a))
+         return arr;  
     }
 }
